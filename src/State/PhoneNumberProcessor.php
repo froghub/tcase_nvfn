@@ -9,7 +9,6 @@ use App\Entity\PhoneNumber;
 use App\Enum\Status;
 use App\Service\PhoneNumberCacheService;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
@@ -18,27 +17,21 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class PhoneNumberProcessor implements ProcessorInterface
 {
     public function __construct(
-        #[Autowire('api_platform.doctrine.orm.state.persist_processor')]
+        #[Autowire(service : 'api_platform.doctrine.orm.state.persist_processor')]
         private readonly ProcessorInterface $persistProcessor,
-        #[Autowire('api_platform.doctrine.orm.state.remove_processor')]
-        private readonly ProcessorInterface $removeProcessor,
         private readonly PhoneNumberCacheService $cacheService
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
-        $processor = $this->persistProcessor;
-        if($operation instanceof DeleteOperationInterface) {
-            $processor = $this->removeProcessor;
-        } else if ($data->getId()) {
+       if ($data->getId()) {
             $previousData = $this->cacheService->get($data->getId()->toString());
             if ($previousData && $previousData->getStatus() === Status::ARCHIVED) {
                 throw new BadRequestHttpException('Нельзя изменять объект в архивном статусе.');
             }
         }
 
-
-        $result = $processor->process($data, $operation, $uriVariables, $context);
+        $result = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
         if ($data instanceof PhoneNumber && $data->getId()) {
             $this->cacheService->invalidate($data->getId()->toString());
         }
