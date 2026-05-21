@@ -32,7 +32,7 @@ class PhoneNumberProcessor implements ProcessorInterface
 
         $result = $processor->process($data, $operation, $uriVariables, $context);
         if ($data instanceof PhoneNumber && $data->getId()) {
-            $this->cacheService->invalidateCache($data->getId()->toString());
+            $this->cacheService->invalidate($data->getId()->toString());
         }
 
         return $result;

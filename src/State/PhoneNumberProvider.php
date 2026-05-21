@@ -16,8 +16,8 @@ class PhoneNumberProvider implements ProviderInterface
 {
 
     public function __construct(
-//        #[Autowire(service: 'api_platform.doctrine.orm.state.item_provider')]
-//        private readonly ProviderInterface $itemProvider,
+        #[Autowire(service: 'api_platform.doctrine.orm.state.item_provider')]
+        private readonly ProviderInterface $itemProvider,
         #[Autowire(service: 'api_platform.doctrine.orm.state.collection_provider')]
         private readonly ProviderInterface $collectionProvider,
         private readonly PhoneNumberCacheService $cacheService,
@@ -33,6 +33,15 @@ class PhoneNumberProvider implements ProviderInterface
             return null;
         }
 
-        return $this->cacheService->getCachedNumber($id);
+        $phoneNumber = $this->cacheService->get($id);
+
+        if ($phoneNumber === null) {
+            $phoneNumber = $this->itemProvider->provide($operation, $uriVariables, $context);
+
+            if ($phoneNumber instanceof PhoneNumber) {
+                $this->cacheService->set($id, $phoneNumber);
+            }
+        }
+        return $phoneNumber;
     }
 }
