@@ -12,7 +12,6 @@ services:
         - .env.docker.dev
     environment:
       HOME: /tmp
-      DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?serverVersion=18&charset=utf8"
       REDIS_URL: "redis://redis:6379"
       APP_ENV: dev
       APP_DEBUG: 1
@@ -34,7 +33,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql
 
   redis:
     image: redis:alpine

@@ -7,7 +7,7 @@ services:
             dockerfile: docker/php/Dockerfile
             target: app_prod
         environment:
-            DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?serverVersion=18&charset=utf8"
+            DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?serverVersion=18&charset=utf8&host=postgres"
             REDIS_URL: "redis://redis:6379"
             APP_ENV: prod
             APP_DEBUG: 0
@@ -32,7 +32,7 @@ services:
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
         volumes:
-            - db_data:/var/lib/postgresql/data
+            - db_data:/var/lib/postgresql
 
     redis:
         image: redis:alpine

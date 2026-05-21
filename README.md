@@ -47,3 +47,7 @@ docker compose -f docker-compose.prod.yml exec php php bin/console doctrine:migr
 ```bash
 docker compose down
 ```
+
+Альтернативный способ запуска/миграции/остановки:  
+`make up` / `make migrate` / `make down`  
+`make prod-up` / `make prod-migrate` / `make prod-down`  
