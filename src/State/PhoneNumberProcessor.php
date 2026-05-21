@@ -6,9 +6,11 @@ use ApiPlatform\Metadata\DeleteOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Entity\PhoneNumber;
+use App\Enum\Status;
 use App\Service\PhoneNumberCacheService;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * @implements ProcessorInterface<PhoneNumber, void>
@@ -28,7 +30,13 @@ class PhoneNumberProcessor implements ProcessorInterface
         $processor = $this->persistProcessor;
         if($operation instanceof DeleteOperationInterface) {
             $processor = $this->removeProcessor;
+        } else if ($data->getId()) {
+            $previousData = $this->cacheService->get($data->getId()->toString());
+            if ($previousData && $previousData->getStatus() === Status::ARCHIVED) {
+                throw new BadRequestHttpException('Нельзя изменять объект в архивном статусе.');
+            }
         }
+
 
         $result = $processor->process($data, $operation, $uriVariables, $context);
         if ($data instanceof PhoneNumber && $data->getId()) {
