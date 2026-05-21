@@ -47,7 +47,7 @@ class PhoneNumber
     #[ORM\Column(length: 15, unique: true)]
     #[Groups(['phone:create','phone:read'])]
     #[Assert\NotBlank(message: 'Номер обязателен')]
-    #[Assert\Length(min:5, max:15)]
+    #[Assert\Length(min:5, max:15, maxMessage: 'Максимум 15 цифр')]
     #[Assert\Regex(
         pattern: '/^[0-9]+$/',
         message: 'Допустимы только числа'
@@ -87,12 +87,12 @@ class PhoneNumber
         return $this;
     }
 
-    public function getNumber(): ?int
+    public function getNumber(): ?string
     {
         return $this->number;
     }
 
-    public function setNumber(int $number): static
+    public function setNumber(string $number): static
     {
         $this->number = $number;
 

@@ -16,7 +16,10 @@ docker compose exec php php bin/console doctrine:migrations:migrate --no-interac
 ```bash
 docker compose down
 ```
-
+Запуск тестов: `make test`  
+Описание API находится по адресу:  
+[localhost:8080/api]()  
+Экспорт описания Api в файл `make openapi-export`  
 ___
 ## Запуск prod  
 
@@ -51,3 +54,5 @@ docker compose down
 Альтернативный способ запуска/миграции/остановки:  
 `make up` / `make migrate` / `make down`  
 `make prod-up` / `make prod-migrate` / `make prod-down`  
+
+

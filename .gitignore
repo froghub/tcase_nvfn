@@ -8,4 +8,6 @@
 /var/
 /vendor/
 /.idea
+/.composer
 ###< symfony/framework-bundle ###
+/.phpunit.result.cache

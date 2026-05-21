@@ -4,7 +4,7 @@ GROUP_ID = $(shell id -g)
 # Запуск команд через эту переменную автоматически прокидывает ID пользователя
 DOCKER_DEV = USER_ID=$(USER_ID) GROUP_ID=$(GROUP_ID) docker compose
 
-.PHONY: up down build restart migrate cc-dev cc-prod prod-up prod-down
+.PHONY: up down build restart migrate cc-dev cc-prod prod-up prod-down test openapi-export
 
 # ==========================================
 # КОМАНДЫ ДЛЯ РАЗРАБОТКИ (DEV)
@@ -37,7 +37,10 @@ cc-dev:
 bash:
 	$(DOCKER_DEV) exec php sh
 
-
+test:
+	docker compose exec php ./vendor/bin/simple-phpunit
+openapi-export:
+	docker compose exec php bin/console api:openapi:export --output=openapi.yaml
 # ==========================================
 # КОМАНДЫ ДЛЯ ПРОДАКШЕНА (PROD)
 # ==========================================

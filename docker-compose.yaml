@@ -6,12 +6,14 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile
     user: "${USER_ID:-0}:${GROUP_ID:-0}"
+    working_dir: /var/www/project
     volumes:
       - ./:/var/www/project
     env_file:
         - .env.docker.dev
     environment:
       HOME: /tmp
+      COMPOSER_HOME: /var/www/project/.composer
       REDIS_URL: "redis://redis:6379"
       APP_ENV: dev
       APP_DEBUG: 1
