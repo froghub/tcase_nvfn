@@ -1,10 +1,9 @@
-version: '3.8'
-
 services:
   php:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
+      target: app_dev
     user: "${USER_ID:-0}:${GROUP_ID:-0}"
     working_dir: /var/www/project
     volumes:
@@ -14,7 +13,6 @@ services:
     environment:
       HOME: /tmp
       COMPOSER_HOME: /var/www/project/.composer
-      REDIS_URL: "redis://redis:6379"
       APP_ENV: dev
       APP_DEBUG: 1
 

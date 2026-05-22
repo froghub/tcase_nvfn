@@ -1,14 +1,12 @@
-version: '3.8'
-
 services:
     php:
         build:
             context: .
             dockerfile: docker/php/Dockerfile
             target: app_prod
+        env_file:
+            -   .env.docker.prod
         environment:
-            DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?serverVersion=18&charset=utf8&host=postgres"
-            REDIS_URL: "redis://redis:6379"
             APP_ENV: prod
             APP_DEBUG: 0
             APP_SECRET: ${APP_SECRET}
@@ -27,10 +25,8 @@ services:
 
     postgres:
         image: postgres:18-alpine
-        environment:
-            POSTGRES_DB: ${POSTGRES_DB}
-            POSTGRES_USER: ${POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        env_file:
+            - .env.docker.prod
         volumes:
             - db_data:/var/lib/postgresql
 

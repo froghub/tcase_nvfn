@@ -32,8 +32,7 @@ git clone https://github.com/froghub/tcase_nvfn.git
 cp .env.docker.env .env.docker.prod
 ```  
 
-Устанавливаем APP_ENV=prod  
-Остальные - меняем на актуальные для prod-окружения  
+Меняем значения на актуальные для prod-окружения  
 
 
 3.Запускаем:
